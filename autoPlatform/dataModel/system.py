@@ -8,8 +8,8 @@ from autoPlatform.config.service import db
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, func, ForeignKey
 
 
-class Configurations(db.Model):
-    __tableName__ = "configurations"
+class System(db.Model):
+    __tableName__ = "system"
 
     id = Column(Integer, primary_key=True, autoincrement=True, comment="配置id")
     config_name = Column(String(64), nullable=False, unique=True, comment="配置名称")

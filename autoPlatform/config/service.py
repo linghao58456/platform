@@ -57,6 +57,6 @@ def create_tables(app):
     :return:
     """
     from autoPlatform.dataModel.users import Users
-    from autoPlatform.dataModel.configurations import Configurations
+    from autoPlatform.dataModel.system import System
 
     db.create_all(app=app)

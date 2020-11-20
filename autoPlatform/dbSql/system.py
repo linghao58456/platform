@@ -7,7 +7,7 @@
 from autoPlatform.dbSql.initialization import initialization
 
 
-class Configuration(initialization):
+class Systems(initialization):
     """配置信息相关查询"""
 
     def insert_config(self, config_name: str, config_path: str, user_id: int):
@@ -20,7 +20,7 @@ class Configuration(initialization):
         """
         try:
             self.cursor.execute(
-                f"insert into configurations (config_name,config_path,creatorId) values ('{config_name}',"
+                f"insert into system (config_name,config_path,creatorId) values ('{config_name}',"
                 f"'{config_path}',{user_id})")
             self.db.commit()
             return True
@@ -35,7 +35,7 @@ class Configuration(initialization):
         :param config_name: 配置名称;string
         :return:
         """
-        self.cursor.execute(f"select * from configurations where config_name={config_name}")
+        self.cursor.execute(f"select * from system where config_name={config_name}")
         result = self.cursor.fetchall()
         return result
 
@@ -49,7 +49,7 @@ class Configuration(initialization):
         """
         try:
             self.cursor.execute(
-                f"update configurations set config_path={config_path},modifyId={user_id} where config_name={config_name}")
+                f"update system set config_path={config_path},modifyId={user_id} where config_name={config_name}")
             self.db.commit()
             return True
         except Exception as e:
@@ -67,16 +67,10 @@ class Configuration(initialization):
         """
         try:
             self.cursor.execute(
-                f"update configurations set status={status},modifyId={user_id} where config_name={config_name}")
+                f"update system set status={status},modifyId={user_id} where config_name={config_name}")
             self.db.commit()
             return True
         except Exception as e:
             print(str(e))
             self.db.rollback()
             return True
-
-
-if __name__ == '__main__':
-    conf = Configuration()
-    a = conf.insert_config("222", "222", 10002)
-    print(a)

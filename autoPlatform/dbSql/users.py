@@ -42,7 +42,7 @@ class User(initialization):
         :return: 成功：提交，失败：回滚
         """
         try:
-            self.cursor.execute(f"insert into users (username,password,status) values ('{username}','{password}',0)")
+            self.cursor.execute(f"insert into users (username,password) values ('{username}','{password}')")
             self.db.commit()
             return True
         except Exception as e:
@@ -55,7 +55,7 @@ class User(initialization):
         删除用户
         :param username: 用户名:string
         :param status: 0:启用,1:禁用
-        :return:
+        :return: 成功：提交，失败：回滚
         """
         try:
             self.cursor.execute(f"update users set status={status} where username={username}")
@@ -66,8 +66,18 @@ class User(initialization):
             self.db.rollback()
             return False
 
-
-if __name__ == '__main__':
-    user = User()
-    a = user.insert_user_info("admin", "123123")
-    print(a)
+    def update_user_password(self, username: str, password: str):
+        """
+        更新用户密码
+        :param username: 用户名:string
+        :param password: 密码:string
+        :return: 成功：提交，失败：回滚
+        """
+        try:
+            self.cursor.execute(f"update users set password='{password}' where username='{username}'")
+            self.db.commit()
+            return True
+        except Exception as e:
+            print(str(e))
+            self.db.rollback()
+            return False

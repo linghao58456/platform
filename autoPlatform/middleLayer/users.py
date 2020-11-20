@@ -58,7 +58,7 @@ class Users:
             response = self.user.insert_user_info(username, newPwd)
             if response:
                 new_res = self.select_user(username)
-                return new_res
+                return {"code": 1000, "data": new_res['data'], "message": "success"}
             return {"code": 9999, "data": {}, "message": "fail"}
         return {"code": 9999, "data": result['data'], "message": "用户已存在"}
 
@@ -78,6 +78,36 @@ class Users:
             return {"code": 9999, "data": {}, "message": "fail"}
         return {"code": 9999, "data": {}, "message": "用户不存在"}
 
-if __name__ == '__main__':
-    user= Users()
-    user.insert_user("1212","123123")
+    def update_user_password(self, username: str, password: str):
+        """
+        更新用户密码
+        :param password: 密码:string
+        :param username: 用户名:string
+        :return: 用户信息:dict
+        """
+        result = self.select_user(username)
+        if result['code'] == 1000:
+            new_password = makeMd5(password)
+            response = self.user.update_user_password(username, new_password)
+            if response:
+                new_res = self.select_user(username)
+                return {"code": 1000, "data": new_res['data'], "message": "success"}
+            return {"code": 9999, "data": {}, "message": "fail"}
+        return {"code": 9999, "data": {}, "message": "fail"}
+
+    def change_user_password(self, username: str, old_password: str, new_password: str):
+        """
+        修改用户密码
+        :param username: 用户名:string
+        :param old_password: 旧密码:string
+        :param new_password: 新密码:string
+        :return: 用户信息:dict
+        """
+        result = self.select_user(username)
+        if result['code'] == 1000:
+            password = makeMd5(old_password)
+            if password == result['data']['password']:
+                response = self.update_user_password(username, new_password)
+                return {"code": 1000, "data": response['data'], "message": "success"}
+            return {"code": 9999, "data": {}, "message": "旧密码不正确"}
+        return {"code": 9999, "data": {}, "message": "fail"}
