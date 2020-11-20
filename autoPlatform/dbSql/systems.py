@@ -20,7 +20,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"insert into system (config_name,config_path,creatorId) values ('{config_name}',"
+                f"insert into systems (config_name,config_path,creatorId) values ('{config_name}',"
                 f"'{config_path}',{user_id})")
             self.db.commit()
             return True
@@ -29,13 +29,16 @@ class Systems(initialization):
             self.db.rollback()
             return False
 
-    def select_config(self, config_name: str):
+    def select_config(self, system_name=None):
         """
         查询配置信息
-        :param config_name: 配置名称;string
+        :param system_name: 配置名称:string,默认为none
         :return:
         """
-        self.cursor.execute(f"select * from system where config_name={config_name}")
+        if system_name is not None:
+            self.cursor.execute(f"select * from systems where config_name='{system_name}'")
+        else:
+            self.cursor.execute(f"select * from systems")
         result = self.cursor.fetchall()
         return result
 
@@ -49,7 +52,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"update system set config_path={config_path},modifyId={user_id} where config_name={config_name}")
+                f"update systems set config_path={config_path},modifyId={user_id} where config_name={config_name}")
             self.db.commit()
             return True
         except Exception as e:
@@ -67,7 +70,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"update system set status={status},modifyId={user_id} where config_name={config_name}")
+                f"update systems set status={status},modifyId={user_id} where config_name={config_name}")
             self.db.commit()
             return True
         except Exception as e:

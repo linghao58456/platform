@@ -1,4 +1,4 @@
-from autoPlatform.dbSql.system import Systems
+from autoPlatform.dbSql.systems import Systems
 
 
 class System:
@@ -68,9 +68,3 @@ class System:
                 return {"code": 1000, "data": new_result['data'], "message": "success"}
             return {"code": 9999, "data": {}, "message": "fail"}
         return result
-
-
-if __name__ == '__main__':
-    config = System()
-    a = config.delete_system_info("222", 1, 10002)
-    print(a)
