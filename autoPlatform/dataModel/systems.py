@@ -12,8 +12,8 @@ class Systems(db.Model):
     __tableName__ = "systems"
 
     id = Column(Integer, primary_key=True, autoincrement=True, comment="配置id")
-    config_name = Column(String(64), nullable=False, unique=True, comment="配置名称")
-    config_path = Column(String(64), nullable=True, comment="配置路径地址")
+    system_name = Column(String(64), nullable=False, unique=True, comment="配置名称")
+    system_path = Column(String(64), nullable=True, comment="配置路径地址")
     status = Column(Boolean, server_default="0", comment="当前账户状态(0:启用,1:禁用)")
     creatorId = Column(Integer, ForeignKey("users.user_id"), nullable=True, comment="创建者id")
     modifyId = Column(Integer, ForeignKey("users.user_id"), nullable=True, comment="修改者id")

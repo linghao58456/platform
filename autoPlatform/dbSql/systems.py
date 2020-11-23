@@ -20,7 +20,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"insert into systems (config_name,config_path,creatorId) values ('{config_name}',"
+                f"insert into systems (system_name,system_path,creatorId) values ('{config_name}',"
                 f"'{config_path}',{user_id})")
             self.db.commit()
             return True
@@ -29,16 +29,18 @@ class Systems(initialization):
             self.db.rollback()
             return False
 
-    def select_config(self, system_name=None):
+    def select_config(self, system_name=None, start=0, end=10):
         """
         查询配置信息
+        :param end: 分页结束数
+        :param start: 分页开始数
         :param system_name: 配置名称:string,默认为none
         :return:
         """
         if system_name is not None:
-            self.cursor.execute(f"select * from systems where config_name='{system_name}'")
+            self.cursor.execute(f"select * from systems where system_name='{system_name}' limit {start},{end}")
         else:
-            self.cursor.execute(f"select * from systems")
+            self.cursor.execute(f"select * from systems limit {start},{end}")
         result = self.cursor.fetchall()
         return result
 
@@ -52,7 +54,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"update systems set config_path={config_path},modifyId={user_id} where config_name={config_name}")
+                f"update systems set system_path={config_path},modifyId={user_id} where system_name={config_name}")
             self.db.commit()
             return True
         except Exception as e:
@@ -70,7 +72,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"update systems set status={status},modifyId={user_id} where config_name={config_name}")
+                f"update systems set status={status},modifyId={user_id} where system_name={config_name}")
             self.db.commit()
             return True
         except Exception as e:

@@ -11,9 +11,17 @@ from autoPlatform.middleLayer.systems import System
 system = System()
 
 
-@api.route("/getSystem/list", methods=["GET"])
+@api.route("/system/list", methods=["GET"])
 def get_system_list():
     data = request.args.get("systemName")
-    print(data)
-    response = system.select_system_info(data)
+    currentPage = request.args.get("currentPage")
+    pageSize = request.args.get("pageSize")
+    response = system.select_system_info(data, currentPage, pageSize)
+    return jsonify(response)
+
+
+@api.route("/system/add", methods=["POST"])
+def add_system_info():
+    data = request.get_json()
+    response = system.insert_system_info(data['systemName'], data['systemPath'], data['userId'])
     return jsonify(response)

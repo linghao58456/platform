@@ -5,21 +5,25 @@ class System:
     def __init__(self):
         self.config = Systems()
 
-    def select_system_info(self, config_name: str):
+    def select_system_info(self, config_name: str, start=1, end=10):
         """
         查询配置信息
+        :param end: 分页结束
+        :param start: 分页开始
         :param config_name: 配置名称:string
         :return:
         """
-        result = self.config.select_config(config_name)
+        m = (int(start) - 1) * int(end)
+        n = int(start) * int(end)
+        result = self.config.select_config(config_name, m, n)
         if len(result) > 0:
-            config_dict = {}
+            config_dict = []
             for conf in result:
-                config_dict.update({"id": conf[0], "config_name": conf[1], "config_path": conf[2], "status": conf[3],
+                config_dict.append({"id": conf[0], "system_name": conf[1], "system_path": conf[2], "status": conf[3],
                                     "creatorId": conf[4], "modifyId": conf[5], "create_time": conf[6],
                                     "modify_time": conf[7]})
-            return {"code": 1000, "data": config_dict, "message": "success"}
-        return {"code": 9999, "data": {}, "message": "配置名称不存在"}
+            return {"code": 1000, "data": config_dict, "message": "success", "total": len(result)}
+        return {"code": 9999, "data": {}, "message": "暂无数据", "total": len(result)}
 
     def insert_system_info(self, config_name: str, config_path: str, user_id: int):
         """
