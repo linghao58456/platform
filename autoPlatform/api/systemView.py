@@ -25,3 +25,17 @@ def add_system_info():
     data = request.get_json()
     response = system.insert_system_info(data['systemName'], data['systemPath'], data['userId'])
     return jsonify(response)
+
+
+@api.route("/system/edit", methods=["GET"])
+def edit_system_info():
+    data = request.args.get("systemName")
+    response = system.select_system_info(data)
+    return jsonify(response)
+
+
+@api.route("/system/detail", methods=["GET"])
+def system_detail_info():
+    data = request.args.get("systemName")
+    response = system.select_system_info(data)
+    return jsonify(response)
