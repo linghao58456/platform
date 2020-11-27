@@ -29,24 +29,27 @@ class Systems(initialization):
             self.db.rollback()
             return False
 
-    def select_config(self, system_name=None, start=0, end=10):
+    def select_config(self, system_name=None, status=0, start=0, end=10):
         """
         查询配置信息
+        :param status: 状态
         :param end: 分页结束数
         :param start: 分页开始数
         :param system_name: 配置名称:string,默认为none
         :return:
         """
         if system_name is not None:
-            self.cursor.execute(f"select * from systems where system_name='{system_name}' limit {start},{end}")
+            self.cursor.execute(
+                f"select * from systems where system_name='{system_name}' and status={status} limit {start},{end}")
         else:
             self.cursor.execute(f"select * from systems limit {start},{end}")
         result = self.cursor.fetchall()
         return result
 
-    def update_config(self, config_name: str, config_path: str, user_id: int):
+    def update_config(self, config_name: str, config_path: str, user_id: int, system_id: int):
         """
         更新配置信息
+        :param system_id: 系统id
         :param user_id: 修改用户id:int
         :param config_name: 配置名称:string
         :param config_path: 配置路径地址:string
@@ -54,7 +57,8 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"update systems set system_path={config_path},modifyId={user_id} where system_name={config_name}")
+                f"update systems set system_name='{config_name}', system_path='{config_path}',modifyId={user_id} "
+                f"where id={system_id}")
             self.db.commit()
             return True
         except Exception as e:
@@ -72,7 +76,7 @@ class Systems(initialization):
         """
         try:
             self.cursor.execute(
-                f"update systems set status={status},modifyId={user_id} where system_name={config_name}")
+                f"update systems set status={status},modifyId={user_id} where system_name='{config_name}'")
             self.db.commit()
             return True
         except Exception as e:

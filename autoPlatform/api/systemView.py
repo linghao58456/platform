@@ -14,9 +14,10 @@ system = System()
 @api.route("/system/list", methods=["GET"])
 def get_system_list():
     data = request.args.get("systemName")
+    status = request.args.get("status")
     currentPage = request.args.get("currentPage")
     pageSize = request.args.get("pageSize")
-    response = system.select_system_info(data, currentPage, pageSize)
+    response = system.select_system_info(data, status, currentPage, pageSize)
     return jsonify(response)
 
 
@@ -27,15 +28,22 @@ def add_system_info():
     return jsonify(response)
 
 
-@api.route("/system/edit", methods=["GET"])
-def edit_system_info():
+@api.route("/system/detail", methods=["GET"])
+def system_detail_info():
     data = request.args.get("systemName")
     response = system.select_system_info(data)
     return jsonify(response)
 
 
-@api.route("/system/detail", methods=["GET"])
-def system_detail_info():
-    data = request.args.get("systemName")
-    response = system.select_system_info(data)
+@api.route("/system/update", methods=["POST"])
+def update_system_info():
+    data = request.get_json()
+    response = system.update_system_info(data['systemName'], data['systemPath'], data['modifyId'], data['systemId'])
+    return jsonify(response)
+
+
+@api.route("/system/delete", methods=["POST"])
+def delete_system_info():
+    data = request.get_json()
+    response = system.delete_system_info(data['systemName'], data['status'], data['modifyId'])
     return jsonify(response)

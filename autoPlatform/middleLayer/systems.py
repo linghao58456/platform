@@ -5,7 +5,7 @@ class System:
     def __init__(self):
         self.config = Systems()
 
-    def select_system_info(self, config_name: str, start=1, end=10):
+    def select_system_info(self, config_name: str, status=0, start=1, end=10):
         """
         查询配置信息
         :param end: 分页结束
@@ -15,7 +15,7 @@ class System:
         """
         m = (int(start) - 1) * int(end)
         n = int(start) * int(end)
-        result = self.config.select_config(config_name, m, n)
+        result = self.config.select_config(config_name, status, m, n)
         if len(result) > 0:
             config_dict = []
             for conf in result:
@@ -42,15 +42,16 @@ class System:
             return {"code": 9999, "data": {}, "message": "fail"}
         return {"code": 9999, "data": result['data'], "message": "配置名称已存在"}
 
-    def update_system_info(self, config_name: str, config_path, user_id):
+    def update_system_info(self, config_name: str, config_path: str, user_id: int, system_id: int):
         """
         更新配置信息
+        :param system_id: 系统id
         :param config_name: 配置名称:string
         :param config_path: 配置路径地址:string
         :param user_id: 修改用户id:int
         :return:
         """
-        response = self.config.update_config(config_name, config_path, user_id)
+        response = self.config.update_config(config_name, config_path, user_id, system_id)
         if response:
             result = self.select_system_info(config_name)
             return {"code": 1000, "data": result['data'], "message": "success"}
